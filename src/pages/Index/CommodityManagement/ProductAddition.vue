@@ -1,150 +1,141 @@
 <template>
-  <div class="goods_add">
-    <div slot="header">
+  <div>
+    <div class="top">
       <h1>商品添加</h1>
       <el-divider></el-divider>
+
     </div>
-    <div class="aaa">
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+    <div class="content">
+      <el-form ref="form" label-width="80px" style="width:500px">
+        <el-form-item label="商品名称">
+          <el-input v-model="name"></el-input>
         </el-form-item>
-
-        <el-form-item label="商品分类" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择商品分类">
-            <el-option label="分类一" value="分类一"></el-option>
-            <el-option label="分类二" value="分类二"></el-option>
-          </el-select>
+        <el-form-item label="商品分类">
+          <template>
+            <el-select v-model="category" filterable placeholder="请选择">
+              <el-option
+                v-for="(v,i) in categories"
+                :key="i"
+                :label="v.cateName"
+                :value="v.cateName"
+              ></el-option>
+            </el-select>
+          </template>
         </el-form-item>
-
-        <el-form-item label="商品价格" prop="price">
-          <el-input-number v-model="ruleForm.num" @change="handleChange" :min="0" label="描述文字"></el-input-number>
+        <el-form-item label="商品价格">
+          <el-input-number v-model="price" :min="1" :max="10" label="描述文字"></el-input-number>
         </el-form-item>
-
         <el-form-item label="商品图片">
           <el-upload
-            class="avatar-uploader"
             action="http://127.0.0.1:5000/goods/goods_img_upload"
-            :show-file-list="false"
-            :on-success="uploadSuccess"
-            :before-upload="beforeUpload"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-success="handlePicSuccess"
           >
-            <img v-if="ruleForm.imageUrl" :src="imgServeUrl + ruleForm.imgUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <i class="el-icon-plus"></i>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+          </el-dialog>
         </el-form-item>
-
-        <el-form-item label="商品描述" prop="desc">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        <el-form-item label="商品描述">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="goodsDesc"></el-input>
         </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即新增</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
+        <el-button @click="upload" type="primary">添加商品</el-button>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-import { API_ADD_GOODS } from "../../../api/api";
-
+import { API_ADD_GOODS, API_GOODS_CATEGORIES  } from "@/api/api";
 export default {
+  created() {
+    API_GOODS_CATEGORIES().then(res => {
+      this.categories = res.data.categories;
+    });
+  },
   data() {
     return {
-      imgServeUrl: "http://127.0.0.1:5000/upload/imgs/goods_img/",
-      ruleForm: {
-        name: "",
-        region: "",
-        num: "",
-        desc: "",
-        imageUrl: ""
-      },
-      rules: {
-        name: [
-          { required: true, message: "请输入商品名称", trigger: "blur" },
-          { min: 2, message: "长度在 2 个字符以上", trigger: "blur" }
-        ],
-        region: [
-          { required: true, message: "请选择商品分类", trigger: "change" }
-        ],
-        imageUrl: [
-          {
-            required: true,
-            message: "请添加商品图片",
-            trigger: "change"
-          }
-        ],
-        desc: [{ required: true, message: "请填写商品描述", trigger: "blur" }]
-      }
+      name: "",
+      category: "",
+      price: "",
+      imgUrl: "",
+      goodsDesc: "",
+      isupdate: true,
+      dialogImageUrl: "",
+      dialogVisible: false,
+      categories: [] 
     };
   },
+
   methods: {
-    submitForm() {
-      var data = {
-        name: this.ruleForm.name,
-        category: this.ruleForm.region,
-        price: this.ruleForm.num,
-        imgUrl: this.ruleForm.imageUrl,
-        goodsDesc: this.ruleForm.desc
-      };
-      API_ADD_GOODS(data).then(res => {
-        console.log(res);
-        if (res.data.code == 0) {
-          this.$router.push("/index/productlist");
-          this.$message({
-            message: "添加成功！",
-            type: "success"
-          });
-        } else {
-          this.$message.error(res.data.msg);
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-    handleChange(value) {
-      console.log(value);
+    handlePicSuccess(res) {
+      if (res.code == 0) {
+        this.imgUrl = res.imgUrl;
+      } else {
+        this.$message({
+          showClose: true,
+          message: "图片上传失败",
+          type: "error"
+        });
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-    uploadSuccess(res) {
-      let { code, msg, imgUrl } = res;
-      if (code === 0) {
-        this.$message({ type: "success", message: msg });
-        this.ruleForm.imageUrl = imgUrl;
-      }
+    handlePictureCardPreview(file) {
+      this.imgUrl = file.url;
+      this.dialogVisible = true;
     },
-    beforeUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt1M = file.size / 1024 / 1024 < 1;
+    upload() {
+      if (this.isupdate) {
+        this.isupdate = false;
+        API_ADD_GOODS(
+          this.name,
+          this.category,
+          this.price,
+          this.imgUrl,
+          this.goodsDesc
+        ).then(res => {
+          if (res.data.code == 0) {
+          this.$router.push("/index/productlist");
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+            this.$message({
+              showClose: true,
+              message: "商品添加成功",
+              type: "success"
+            });
+            this.name = "";
+            this.category = "";
+            this.price = "";
+            this.imgUrl = "";
+            this.goodsDesc = "";
+          } else {
+            this.$message({
+              showClose: true,
+              message: "商品添加失败",
+              type: "error"
+            });
+          }
+          setTimeout(() => {
+            this.isupdate = true;
+          }, 3000);
+        });
+      } else {
+        this.$message({
+          showClose: true,
+          message: "您的操作过于频繁",
+          type: "error"
+        });
       }
-      if (!isLt1M) {
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-      }
-      return isJPG && isLt1M;
     }
   }
 };
 </script>
 
 <style scoped>
-.goods_add .aaa {
-  width: 600px;
-}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -167,8 +158,5 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
-}
-.goods_add .avatar-uploader-icon {
-  line-height: 178px !important;
 }
 </style>

@@ -5,6 +5,7 @@
       <!-- <el-button type="primary" class="headBtn">保存</el-button> -->
       <el-button type="primary" @click="button">{{name}}</el-button>
     </div>
+    <el-divider></el-divider>
     <div>
       <el-form ref="form" :model="form" label-width="80px" :disabled="isDisabled">
         <el-form-item label="店铺名称">
@@ -34,6 +35,7 @@
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :on-success="handleSuccess"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -59,7 +61,7 @@
         <el-form-item label="活动">
           <el-checkbox-group v-model="form.type">
             <el-checkbox label="在线支付满28减5" name="type"></el-checkbox>
-            <el-checkbox label="VS无线橙果汁全场8折" name="type"></el-checkbox>
+            <el-checkbox label="VC无限橙果汁全场8折" name="type"></el-checkbox>
             <el-checkbox label="单人精彩套餐" name="type"></el-checkbox>
             <el-checkbox label="特价饮品8折抢购" name="type"></el-checkbox>
             <el-checkbox label="单人特色套餐" name="type"></el-checkbox>
@@ -103,6 +105,8 @@ export default {
         // data2: ""
         data: []
       },
+      // fileList: [],
+      // newUrl: [],
 
       dialogImageUrl: "",
       dialogVisible: false,
@@ -148,7 +152,10 @@ export default {
         this.dialogVisible = true;
       }
     },
-    async button() {
+    handleSuccess(res) {
+      console.log(res);
+    },
+    button() {
       if (this.isDisabled === true) {
         this.isDisabled = false;
         this.name = "保存";
@@ -166,7 +173,7 @@ export default {
           supports: JSON.stringify(this.form.type), //活动
           date: JSON.stringify(this.form.date) //时间
         };
-        let { code } = await API_SHOPR_EDIT(zz);
+        let { code } = API_SHOPR_EDIT(zz);
         if (code === 0) {
           this.isDisabled = true;
           this.name = "编辑";
@@ -176,8 +183,6 @@ export default {
   },
   created() {
     API_SHOP_INFO().then(res => {
-      console.log(res);
-
       let {
         name,
         bulletin,
@@ -202,12 +207,6 @@ export default {
       this.form.sales = sellCount; //销量
       this.form.type = supports; //活动
       this.form.date = date; //时间
-      /*       for (let key in res.data.data.date) {
-        if (key === "type") {
-          res.data.data.date[key] = JSON.parse(res.data.data.date[key]);
-        }
-      }
-      this.form = res.data.data.date; */
     });
   }
 };

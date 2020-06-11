@@ -4,9 +4,13 @@
       <h1>商品分类</h1>
       <el-button type="primary" @click="dialogFormVisible = true">添加分类</el-button>
     </div>
+    <el-divider></el-divider>
+
     <div class="content">
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="ID" width="300"><template slot-scope="scope">{{scope.row.id}}</template></el-table-column>
+        <el-table-column label="ID" width="300">
+          <template slot-scope="scope">{{scope.row.id}}</template>
+        </el-table-column>
         <el-table-column label="分类名称" width="300">
           <template slot-scope="scope">
             <span v-show="scope.row.flag" v-html="scope.row.cateName" style="margin-left: 10px"></span>
@@ -37,7 +41,7 @@
         </el-table-column>
       </el-table>
 
-      <div class='block'>
+      <div class="block">
         <el-pagination
           @current-change="updateList($event,pageSize)"
           @size-change="updateList(currentPage,$event)"
@@ -83,7 +87,12 @@
 // import { Delcate_api } from "../../../api/apis.js"; //删除商品分类
 // import { Editcate_api } from "../../../api/apis.js"; //修改商品分类
 // import { Addcate_api } from "../../../api/apis.js"; //添加商品分类
-import { API_GET_TYPE, API_DEL_TYPE, API_ADD_TYPE,API_CHANGE_TYPE } from "../../../api/api.js";
+import {
+  API_GET_TYPE,
+  API_DEL_TYPE,
+  API_ADD_TYPE,
+  API_CHANGE_TYPE
+} from "../../../api/api.js";
 export default {
   //获取列表
   created() {

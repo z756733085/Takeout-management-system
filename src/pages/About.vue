@@ -1,6 +1,6 @@
 <template>
   <div class="admininfo box">
-    <h3>管理员信息</h3>
+    <h1>管理员信息</h1>
     <section>
       <p>
         <span>管理员ID：</span>

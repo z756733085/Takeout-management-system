@@ -24,11 +24,11 @@
               <el-form-item label="商品图片">
                 <el-avatar :size="60">
                   <!-- <img :src="'http://127.0.0.1:5000/upload/imgs/goods_img/'+props.row.imgUrl" /> -->
-                  <img :src="imgServeUrl + props.row.imgUrl" class="avatar"/>
+                  <img :src="imgServeUrl + props.row.imgUrl" />
                 </el-avatar>
               </el-form-item>
-              <el-form-item label="创建时间">
-                <span>{{ props.row.ctime }}</span>
+              <el-form-item label="创建时间" >
+                <span>{{ date(props.row.ctime) }}</span>
               </el-form-item>
               <el-form-item label="商品评价">
                 <span>{{ props.row.rating }}</span>
@@ -85,7 +85,7 @@
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
             >
-              <img v-if="form.imgUrl" :src="imgServeUrl + form.imgUrl" class="avatar" />
+              <img v-if="form.imgUrl" :src="imgServeUrl + form.imgUrl" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -219,12 +219,54 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    //时间转换
+    date(arr) {
+      if (typeof arr == "string") {
+        let date = new Date(arr);
+        //获取年
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        month = month < 9 ? "0" + (month + 1) : month + 1;
+        let day = date.getDate();
+        day = day < 10 ? "0" + day : day;
+        let h = date.getHours();
+        h = h < 10 ? "0" + h : h;
+        let m = date.getMinutes();
+        m = m < 10 ? "0" + m : m;
+        let s = date.getSeconds();
+        s = s < 10 ? "0" + s : s;
+        arr = `${year}-${month}-${day} ${h}:${m}:${s}`;
+        return arr;
+      } else {
+        for (let i in arr) {
+          // console.log(arr[i]);
+          let date = new Date(arr[i]);
+          //获取年
+          let year = date.getFullYear();
+          let month = date.getMonth();
+          month = month < 9 ? "0" + (month + 1) : month + 1;
+          let day = date.getDate();
+          day = day < 10 ? "0" + day : day;
+          let h = date.getHours();
+          h = h < 10 ? "0" + h : h;
+          let m = date.getMinutes();
+          m = m < 10 ? "0" + m : m;
+          let s = date.getSeconds();
+          s = s < 10 ? "0" + s : s;
+          arr[i] = `${year}-${month}-${day} ${h}:${m}:${s}`;
+        }
+        return arr;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+.content .cell img{
+  width: 187px!important;
+}
 .demo-table-expand {
   font-size: 0;
 }

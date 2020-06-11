@@ -88,7 +88,7 @@ export default {
           type: "warning"
         })
           .then(() => {
-            API_CHANGE_PASSWORD(this.ruleForm.checkPass, this.id).then(res => {
+            API_CHANGE_PASSWORD( this.id,this.ruleForm.checkPass).then(res => {
               if (res.data.code == 0) {
                 this.$message({
                   type: "success",

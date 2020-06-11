@@ -94,7 +94,7 @@ export const API_CHANGE_TYPE = (id, cateName, state) =>
 
 // API: 16. 查询所有分类名称
 export const API_GOODS_CATEGORIES = () =>
-    axios.get("/goods/goods/categories", {})
+    axios.get("/goods/categories", {})
 
 // API: 17. 商品图片上传接口
 export const API_GOODSIMG_UPLOAD = () =>
