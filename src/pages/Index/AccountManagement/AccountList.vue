@@ -25,7 +25,7 @@
           <template slot-scope="scope">{{ scope.row.userGroup }}</template>
         </el-table-column>
         <el-table-column label="创建时间" prop="ctime" width="300">
-          <template slot-scope="scope">{{ scope.row.ctime }}</template>
+          <template slot-scope="scope">{{ date(scope.row.ctime) }}</template>
         </el-table-column>
 
         <el-table-column label="操作">
@@ -217,6 +217,45 @@ export default {
         // 从数据中心获取总条数并转整数  赋值给分页组件
         this.total = parseInt(res.data.total);
       });
+    },
+    //时间转换
+    date(arr) {
+      if (typeof arr == "string") {
+        let date = new Date(arr);
+        //获取年
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        month = month < 9 ? "0" + (month + 1) : month + 1;
+        let day = date.getDate();
+        day = day < 10 ? "0" + day : day;
+        let h = date.getHours();
+        h = h < 10 ? "0" + h : h;
+        let m = date.getMinutes();
+        m = m < 10 ? "0" + m : m;
+        let s = date.getSeconds();
+        s = s < 10 ? "0" + s : s;
+        arr = `${year}-${month}-${day} ${h}:${m}:${s}`;
+        return arr;
+      } else {
+        for (let i in arr) {
+          // console.log(arr[i]);
+          let date = new Date(arr[i]);
+          //获取年
+          let year = date.getFullYear();
+          let month = date.getMonth();
+          month = month < 9 ? "0" + (month + 1) : month + 1;
+          let day = date.getDate();
+          day = day < 10 ? "0" + day : day;
+          let h = date.getHours();
+          h = h < 10 ? "0" + h : h;
+          let m = date.getMinutes();
+          m = m < 10 ? "0" + m : m;
+          let s = date.getSeconds();
+          s = s < 10 ? "0" + s : s;
+          arr[i] = `${year}-${month}-${day} ${h}:${m}:${s}`;
+        }
+        return arr;
+      }
     }
   },
   //创建组件对象时获取数据 利用生命周期函数
