@@ -199,7 +199,7 @@ export default {
     });
     API_USERS_ACCOUNTINFO(localStorage.getItem("userId")).then(res => {
       this.pic = res.data.accountInfo.imgUrl;
-      console.log(res);
+      // console.log(res);
     });
 
     this.role = localStorage.role;

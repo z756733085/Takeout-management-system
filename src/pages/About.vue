@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     fechData() {
-      console.log(this.url);
+      // console.log(this.url);
       API_USERS_ACCOUNTINFO(localStorage.getItem("userId")).then(res => {
         var data = res.data.accountInfo;
         this.id = data.id;
@@ -70,8 +70,8 @@ export default {
       });
     },
     onSuccess() {
-      API_HEADIMG_UPLOAD(localStorage.getItem("userId")).then(res => {
-        console.log("res", res);
+      API_HEADIMG_UPLOAD(localStorage.getItem("userId")).then(() => {
+        // console.log(res);
       });
       window.location.reload();
     },

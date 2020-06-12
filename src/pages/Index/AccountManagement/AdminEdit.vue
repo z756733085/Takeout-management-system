@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     this.myForm.id = this.$route.params.id;
-    console.log(this.id);
+    // console.log(this.id);
   },
   methods: {
     Onsubmit() {
@@ -43,7 +43,7 @@ export default {
         this.myForm.name,
         this.myForm.region
       ).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.code == 0) {
           this.$message({
             message: res.data.msg,
