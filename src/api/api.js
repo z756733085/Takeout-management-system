@@ -1,6 +1,27 @@
+// import axios from 'axios'
+// // 设置服务器IP地址
+// axios.defaults.baseURL = 'http://127.0.0.1:5000'
 import axios from 'axios'
-// 设置服务器IP地址
-axios.defaults.baseURL = 'http://127.0.0.1:5000'
+
+//服务器IP地址
+export const SERVER_IP = 'http://127.0.0.1:5000'
+//服务器上传店铺图片API地址
+export const SERVER_UPLOAD = SERVER_IP + '/shop/upload'
+//服务器上传商品图片API地址
+export const SERVER_GOODS_UPLOAD = SERVER_IP + "/goods/goods_img_upload"
+//服务器上传头像图片API地址
+export const SERVER_AVATAR_UPLOAD = SERVER_IP + "/users/avatar_upload"
+
+
+// ---------------------------   获取服务器各类图片地址 ------------------------------------//
+//服务器店铺图片地址
+export const SERVER_SHOP_IMG = SERVER_IP + '/upload/shop/'
+//服务器商品图片地址
+export const SERVER_GOODS_IMG = SERVER_IP + '/upload/imgs/goods_img/'
+//服务器用户头像图片地址
+export const SERVER_USERS_IMG = SERVER_IP + '/upload/imgs/acc_img/'
+
+axios.defaults.baseURL = SERVER_IP
 
 
 // API: 1. 登录

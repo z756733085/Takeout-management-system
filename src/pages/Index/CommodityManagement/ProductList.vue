@@ -23,8 +23,7 @@
               </el-form-item>
               <el-form-item label="商品图片">
                 <el-avatar :size="60">
-                  <!-- <img :src="'http://127.0.0.1:5000/upload/imgs/goods_img/'+props.row.imgUrl" /> -->
-                  <img :src="imgServeUrl + props.row.imgUrl" />
+                  <img :src="servergoodsimg + props.row.imgUrl" />
                 </el-avatar>
               </el-form-item>
               <el-form-item label="创建时间" >
@@ -47,7 +46,7 @@
         <el-table-column label="商品价格" prop="price"></el-table-column>
         <el-table-column label="商品图片" prop="imgUrl">
           <template slot-scope="scope">
-            <img :src="imgServeUrl + scope.row.imgUrl" />
+            <img :src="servergoodsimg + scope.row.imgUrl" />
           </template>
         </el-table-column>
         <el-table-column label="商品描述" prop="goodsDesc"></el-table-column>
@@ -80,12 +79,12 @@
           <el-form-item label="商品图片">
             <el-upload
               class="avatar-uploader"
-              action="http://127.0.0.1:5000/goods/goods_img_upload"
+              :action="servergoodsupload"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
             >
-              <img v-if="form.imgUrl" :src="imgServeUrl + form.imgUrl" />
+              <img v-if="form.imgUrl" :src="servergoodsimg + form.imgUrl" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -119,7 +118,9 @@
 import {
   API_DOODS_LIST,
   API_DEL_GOODS,
-  API_EDIT_GOODS
+  API_EDIT_GOODS,
+  SERVER_GOODS_IMG,
+  SERVER_GOODS_UPLOAD
 } from "../../../api/api";
 export default {
   created() {
@@ -135,7 +136,8 @@ export default {
       pageSize: 5,
       tableData: [],
       dialogFormVisible: false, //隐藏的编辑表单
-      imgServeUrl: "http://127.0.0.1:5000/upload/imgs/goods_img/",
+      servergoodsimg:SERVER_GOODS_IMG,
+      servergoodsupload:SERVER_GOODS_UPLOAD,
       form: {
         //表单数据
         name: "",

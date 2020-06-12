@@ -3,7 +3,6 @@
     <div class="top">
       <h1>商品添加</h1>
       <el-divider></el-divider>
-
     </div>
     <div class="content">
       <el-form ref="form" label-width="80px" style="width:500px">
@@ -27,7 +26,7 @@
         </el-form-item>
         <el-form-item label="商品图片">
           <el-upload
-            action="http://127.0.0.1:5000/goods/goods_img_upload"
+            :action="servergoodsupload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -49,7 +48,11 @@
 </template>
 
 <script>
-import { API_ADD_GOODS, API_GOODS_CATEGORIES  } from "@/api/api";
+import {
+  API_ADD_GOODS,
+  API_GOODS_CATEGORIES,
+  SERVER_GOODS_UPLOAD
+} from "@/api/api";
 export default {
   created() {
     API_GOODS_CATEGORIES().then(res => {
@@ -66,7 +69,8 @@ export default {
       isupdate: true,
       dialogImageUrl: "",
       dialogVisible: false,
-      categories: [] 
+      categories: [],
+      servergoodsupload: SERVER_GOODS_UPLOAD
     };
   },
 
@@ -100,7 +104,7 @@ export default {
           this.goodsDesc
         ).then(res => {
           if (res.data.code == 0) {
-          this.$router.push("/index/productlist");
+            this.$router.push("/index/productlist");
 
             this.$message({
               showClose: true,

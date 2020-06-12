@@ -22,7 +22,7 @@
         <span>管理员头像：</span>
         <el-upload
           class="avatar-uploader"
-          action="http://127.0.0.1:5000/users/avatar_upload"
+          :action="serveravatarupload"
           :show-file-list="false"
           :on-success="onSuccess"
           :before-upload="beforeUpload"
@@ -37,7 +37,11 @@
 </template>
 
 <script>
-import { API_USERS_ACCOUNTINFO, API_HEADIMG_UPLOAD } from "../api/api";
+import {
+  API_USERS_ACCOUNTINFO,
+  API_HEADIMG_UPLOAD,
+  SERVER_AVATAR_UPLOAD
+} from "../api/api";
 export default {
   data() {
     return {
@@ -46,7 +50,8 @@ export default {
       userGroup: "",
       ctime: "",
       imgUrl: "",
-      data: { id: localStorage.getItem("userId") }
+      data: { id: localStorage.getItem("userId") },
+      serveravatarupload: SERVER_AVATAR_UPLOAD
     };
   },
   created() {

@@ -31,7 +31,7 @@
         <el-form-item label="商品图片">
           <el-upload
             class="avatar-uploader"
-            action="http://work.08321.org/sell/goods.php?a=uploadImg"
+            :action="servegoodsimg"
             :show-file-list="false"
             :on-success="uploadSuccess"
             :before-upload="beforeUpload"
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { API_ADD_GOODS } from "../../../api/api";
+import { API_ADD_GOODS,SERVER_GOODS_IMG } from "../../../api/api";
 
 export default {
   data() {
@@ -86,7 +86,8 @@ export default {
         name: "",
         region: "",
         num: "",
-        desc: ""
+        desc: "",
+        servegoodsimg:SERVER_GOODS_IMG
       }
     };
   },
